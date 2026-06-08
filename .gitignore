@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# 运行时生成的数据文件
+fund_list.json
+status_log.json
+changelog.csv
+report.txt
+chart.png
+monitor.log
+
+# 编辑器 / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 开发工具配置
+.claude/
+.codegraph/
+
+# 操作系统
+Thumbs.db
+.DS_Store

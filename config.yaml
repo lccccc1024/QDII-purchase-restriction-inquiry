@@ -1,0 +1,23 @@
+# 场外纳指100 / 标普500基金申购限额监控 — 配置文件
+
+scan:
+  interval: 1800                # 常驻模式扫描间隔（秒），默认30分钟
+  delay_between_requests: 1.5   # 每次请求间隔（秒），避免触发反爬
+  timeout: 15                   # 单次HTTP请求超时（秒）
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+
+data:
+  fund_list_path: "fund_list.json"
+  status_log_path: "status_log.json"
+  changelog_path: "changelog.csv"
+  report_path: "report.txt"
+  chart_path: "chart.png"
+  log_file: "monitor.log"
+
+notify:
+  webhook_url: ""               # Webhook 地址（留空则禁用）
+  webhook_type: "dingtalk"      # dingtalk / feishu / serverchan
+
+proxy:
+  http: ""                      # 如 "http://127.0.0.1:7890"
+  https: ""                     # 如 "http://127.0.0.1:7890"
