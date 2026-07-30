@@ -9,6 +9,8 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+from typing import Optional
+
 from utils import (
     PurchaseStatus,
     normalize_status,
@@ -28,9 +30,9 @@ SP500_KEYWORDS = [
 ]
 EXCLUDE_TYPES = {"ETF-场内", "场内ETF"}  # 排除场内ETF
 
-FUND_LIST_URL = "http://fund.eastmoney.com/js/fundcode_search.js"
-FUND_STATUS_PAGE = "http://fund.eastmoney.com/f10/jjjz_{code}.html"
-FUND_DETAIL_PAGE = "http://fund.eastmoney.com/{code}.html"
+FUND_LIST_URL = "https://fund.eastmoney.com/js/fundcode_search.js"
+FUND_STATUS_PAGE = "https://fund.eastmoney.com/f10/jjjz_{code}.html"
+FUND_DETAIL_PAGE = "https://fund.eastmoney.com/{code}.html"
 # 手机端API，返回JSON，优先使用
 FUND_MOBILE_API = "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNNBasicInformation?FCODE={code}&deviceid=ios_efund&plat=iOS&product=EFund&version=7.0.0"
 # 备用手机端 API v2
@@ -38,13 +40,23 @@ FUND_MOBILE_API_V2 = "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFundBas
 
 
 def create_session(config: dict) -> requests.Session:
-    """创建带 UA 和代理配置的 requests Session。"""
+    """创建带 UA、代理和 API URL 配置的 requests Session。
+
+    API URL 存储为 session 属性（s.api_fund_list_url、s.api_mobile_url 等），
+    各请求函数从 session 读取，避免修改模块级全局变量。
+    """
     s = requests.Session()
+    api_cfg = config.get("api", {})
+    s.api_fund_list_url = api_cfg.get("fund_list_url") or FUND_LIST_URL
+    s.api_mobile_url = api_cfg.get("mobile_api_url") or FUND_MOBILE_API
+    s.api_mobile_v2_url = api_cfg.get("mobile_api_v2_url") or FUND_MOBILE_API_V2
+    s.api_status_page_url = api_cfg.get("status_page_url") or FUND_STATUS_PAGE
+    s.api_detail_page_url = api_cfg.get("detail_page_url") or FUND_DETAIL_PAGE
+    s.timeout = config.get("scan", {}).get("timeout", 15)
     s.headers["User-Agent"] = config.get("scan", {}).get(
         "user_agent",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     )
-    s._timeout = config.get("scan", {}).get("timeout", 15)
     proxy = config.get("proxy", {})
     if proxy.get("http") or proxy.get("https"):
         s.proxies = {k: v for k, v in proxy.items() if v}
@@ -58,16 +70,20 @@ def create_session(config: dict) -> requests.Session:
 def get_all_funds(session: requests.Session) -> list[dict]:
     """从 fundcode_search.js 获取全市场基金列表。"""
     logger.info("正在获取全市场基金列表...")
-    resp = session.get(FUND_LIST_URL, timeout=getattr(session, "_timeout", 15))
+    resp = session.get(session.api_fund_list_url, timeout=getattr(session, "timeout", 15))
     resp.raise_for_status()
     text = resp.text
 
     # 格式: var r = [["000001","HXCXJJ","华夏成长基金","混合型",""], ...]
-    # 正则依赖非贪婪 .*? 匹配整个双层 JSON 数组；失败时降级到无变量名的二次匹配。
-    # 若天天基金网调整 JS 变量名或格式，需同步更新此处。
+    # 优先匹配 var r = [...] 的标准格式；降级时使用更精确的匹配范围，
+    # 缩小匹配以降低误匹配注释或其他 JS 数组中内容的风险。
     match = re.search(r"var\s+r\s*=\s*(\[\[.*?\]\]);", text, re.DOTALL)
     if not match:
-        match = re.search(r"(\[\[.*?\]\])", text, re.DOTALL)
+        # 降级：尝试匹配首个完整的双层 JS 数组（限制长度防误匹配）
+        match = re.search(r"(\[\[[\s\S]{100,}?\]\])\s*;", text, re.DOTALL)
+    if not match:
+        # 末级降级：放宽到只匹配数组结构
+        match = re.search(r"(\[\[.*?\]\])\s*;", text, re.DOTALL)
     if not match:
         raise ValueError("无法解析基金列表数据")
 
@@ -93,7 +109,7 @@ def get_all_funds(session: requests.Session) -> list[dict]:
     return funds
 
 
-def classify_index(name: str) -> str | None:
+def classify_index(name: str) -> Optional[str]:
     """根据基金名称判断跟踪指数类型。复用模块级关键词列表以保证与 _match_any_keyword 同步。"""
     name_lower = name.lower()
     for kw in NASDAQ_KEYWORDS:
@@ -106,12 +122,8 @@ def classify_index(name: str) -> str | None:
 
 
 def _match_any_keyword(name: str) -> bool:
-    """检查基金名称是否匹配任一目标关键词。"""
-    name_lower = name.lower()
-    for kw in NASDAQ_KEYWORDS + SP500_KEYWORDS:
-        if kw in name_lower:
-            return True
-    return False
+    """检查基金名称是否匹配任一目标关键词。复用 classify_index 逻辑。"""
+    return classify_index(name) is not None
 
 
 def _is_etf_listed(name: str, fund_type: str) -> bool:
@@ -192,28 +204,28 @@ def discover_target_funds(session: requests.Session, config: dict) -> list[dict]
 #  申购状态查询
 # ═══════════════════════════════════════════════════════
 
-def _try_mobile_api(session: requests.Session, code: str) -> dict | None:
+def _try_mobile_api(session: requests.Session, code: str) -> Optional[dict]:
     """尝试手机端 JSON API 获取基金基本信息。"""
-    return _fetch_mobile_api(session, code, FUND_MOBILE_API, "mobile_api",
+    return _fetch_mobile_api(session, code, session.api_mobile_url, "mobile_api",
                              status_keys=("SGSTATUS", "sgStatus"),
                              limit_keys=("SGLIMIT", "sgLimit"),
                              date_key="JJJL")
 
 
-def _try_mobile_api_v2(session: requests.Session, code: str) -> dict | None:
+def _try_mobile_api_v2(session: requests.Session, code: str) -> Optional[dict]:
     """尝试手机端 JSON API v2 获取基金基本信息。"""
-    return _fetch_mobile_api(session, code, FUND_MOBILE_API_V2, "mobile_api_v2",
+    return _fetch_mobile_api(session, code, session.api_mobile_v2_url, "mobile_api_v2",
                              status_keys=("sgStatus", "SGSTATUS"),
                              limit_keys=("sgLimit", "SGLIMIT"),
                              date_key="effectiveDate")
 
 
 def _fetch_mobile_api(session, code, url_template, source_name,
-                      status_keys, limit_keys, date_key) -> dict | None:
+                      status_keys, limit_keys, date_key) -> Optional[dict]:
     """手机端 JSON API 通用请求逻辑。"""
     url = url_template.format(code=code)
     try:
-        resp = session.get(url, timeout=getattr(session, "_timeout", 15))
+        resp = session.get(url, timeout=getattr(session, "timeout", 15))
         if resp.status_code != 200:
             return None
         data = resp.json()
@@ -247,11 +259,11 @@ def _fetch_mobile_api(session, code, url_template, source_name,
         return None
 
 
-def _try_status_page(session: requests.Session, code: str) -> dict | None:
+def _try_status_page(session: requests.Session, code: str) -> Optional[dict]:
     """解析基金申购状态页面 HTML。"""
-    url = FUND_STATUS_PAGE.format(code=code)
+    url = session.api_status_page_url.format(code=code)
     try:
-        resp = session.get(url, timeout=getattr(session, "_timeout", 15))
+        resp = session.get(url, timeout=getattr(session, "timeout", 15))
         if resp.status_code != 200:
             return None
         resp.encoding = resp.apparent_encoding or "utf-8"
@@ -289,7 +301,7 @@ def _try_status_page(session: requests.Session, code: str) -> dict | None:
         return None
 
 
-def _try_detail_page(session: requests.Session, code: str) -> dict | None:
+def _try_detail_page(session: requests.Session, code: str) -> Optional[dict]:
     """解析基金详情页 HTML，提取申购状态信息。
 
     HTML 结构 (2024+):
@@ -297,9 +309,9 @@ def _try_detail_page(session: requests.Session, code: str) -> dict | None:
       <span class="staticCell">限大额  (<span>单日累计购买上限500.00元</span>)</span>
       <span class="staticCell">开放赎回</span>
     """
-    url = FUND_DETAIL_PAGE.format(code=code)
+    url = session.api_detail_page_url.format(code=code)
     try:
-        resp = session.get(url, timeout=getattr(session, "_timeout", 15))
+        resp = session.get(url, timeout=getattr(session, "timeout", 15))
         if resp.status_code != 200:
             return None
         resp.encoding = resp.apparent_encoding or "utf-8"

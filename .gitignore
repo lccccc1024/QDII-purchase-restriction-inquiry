@@ -6,12 +6,14 @@ dist/
 build/
 
 # 运行时生成的数据文件
-fund_list.json
 status_log.json
 changelog.csv
 report.txt
 chart.png
 monitor.log
+
+# 日志通用规则
+*.log
 
 # 编辑器 / IDE
 .vscode/

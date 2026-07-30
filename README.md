@@ -4,6 +4,14 @@
 
 ## 快速开始
 
+### 安装
+
+```bash
+pip install -r requirements.txt
+# 或
+pip install -e .
+```
+
 ### Windows
 双击 `run.bat`，或：
 ```bat
@@ -14,9 +22,9 @@ run.bat daemon 3600  # 常驻监控（每小时）
 ### macOS / Linux
 ```bash
 pip install -r requirements.txt
-python monitor.py                 # 单次扫描
-python monitor.py --once --chart  # 扫描 + 生成图表
-python monitor.py --chart-only    # 仅用最近数据生成图表
+python -m monitor                  # 单次扫描
+python -m monitor --once --chart   # 扫描 + 生成图表
+python -m monitor --chart-only     # 仅用最近数据生成图表
 ```
 
 ## 命令行参数
@@ -39,7 +47,7 @@ python monitor.py --chart-only    # 仅用最近数据生成图表
 | `changelog.csv` | 变更历史（可用 Excel 打开） |
 | `status_log.json` | 最近一次扫描的状态快照 |
 | `monitor.log` | 详细运行日志 |
-| `fund_list.json` | 监控基金列表（可手动编辑） |
+| `fund_list.json` | 监控基金列表（可手动编辑，已纳入版本控制） |
 
 ## 首次运行
 
@@ -56,6 +64,14 @@ scan:
   interval: 1800           # daemon 模式扫描间隔（秒）
   timeout: 15              # 单次 HTTP 请求超时（秒）
   delay_between_requests: 1.5  # 请求间隔
+
+# API 接口地址（可自定义覆盖，留空使用默认值）
+api:
+  fund_list_url: ""
+  mobile_api_url: ""
+  mobile_api_v2_url: ""
+  status_page_url: ""
+  detail_page_url: ""
 
 notify:
   webhook_url: ""          # 钉钉/飞书/Server酱 Webhook
@@ -89,6 +105,32 @@ project/
   chart.py          # 图表生成
   utils.py          # 工具函数
   config.yaml       # 配置文件
-  fund_list.json    # 监控基金列表
+  pyproject.toml    # 项目包配置（pip install -e .）
+  fund_list.json    # 监控基金列表（可手动编辑）
   run.bat / run.sh  # 一键启动脚本
+  tests/            # 单元测试
+    test_utils.py
+    test_fetcher.py
+    test_chart.py
+    test_notifier.py
 ```
+
+## 运行测试
+
+```bash
+pip install pytest
+python -m pytest tests/ -v
+```
+
+## 代码质量
+
+本仓库已应用以下改进（基于代码审查报告）：
+
+| 类别 | 改进内容 |
+|---|---|
+| 安全性 | HTTP→HTTPS 升级；移除私有属性 `_timeout` 改用公开属性 |
+| 代码质量 | `_match_any_keyword` 复用 `classify_index`；类型注解兼容 Python 3.8+ |
+| 健壮性 | 正则降级增加长度约束；Windows Ctrl+C 信号处理；截断保留份额标记 |
+| 可维护性 | API URL 可配置化（`config.yaml`）；ANSI 颜色兼容 Windows VT 检测 |
+| 工程化 | `pyproject.toml` 包配置；单元测试 39 项（`pytest`） |
+| 版本控制 | `fund_list.json` 纳入版本控制；`*.log` 通用忽略规则 |

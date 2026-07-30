@@ -167,6 +167,17 @@ def run_once(config: dict, session, do_init: bool = False, do_chart: bool = Fals
 def run_daemon(config: dict, session, interval: int, do_chart: bool = False):
     """常驻监控模式。"""
     logger.info(f"🔄 常驻监控启动，间隔 {interval} 秒")
+    # 在 Windows 上使用退出标志捕获 Ctrl+C，确保优雅退出
+    exit_flag = False
+    if sys.platform == "win32":
+        def _handle_sigint(signum, frame):
+            nonlocal exit_flag
+            exit_flag = True
+        try:
+            import signal
+            signal.signal(signal.SIGINT, _handle_sigint)
+        except Exception:
+            pass
     while True:
         try:
             run_once(config, session, do_init=False, do_chart=do_chart, interactive=False)
@@ -176,8 +187,16 @@ def run_daemon(config: dict, session, interval: int, do_chart: bool = False):
         except Exception as e:
             logger.error(f"扫描异常: {e}", exc_info=True)
 
+        if exit_flag:
+            logger.info("收到中断信号（Windows），退出监控。")
+            break
+
         logger.info(f"等待 {interval} 秒后下一次扫描...")
-        time.sleep(interval)
+        try:
+            time.sleep(interval)
+        except KeyboardInterrupt:
+            logger.info("收到中断信号，退出监控。")
+            break
 
 
 def main():

@@ -7,7 +7,6 @@ import re
 import sys
 from datetime import datetime, timezone, timedelta
 from enum import Enum
-from pathlib import Path
 from typing import Optional
 
 import yaml
@@ -70,7 +69,11 @@ def normalize_status(raw: str) -> PurchaseStatus:
 
 
 def parse_limit_amount(raw: str) -> Optional[float]:
-    """从字符串中提取申购限额金额（元）。支持"1000元""1,000.00""100万"等。"""
+    """从字符串中提取申购限额金额（元）。支持"1000元""1,000.00""100万"等。
+
+    优先级顺序：先匹配"X万"或"Y亿"（大单位优先，匹配后立即返回），
+    再匹配普通数字，避免"100万"中的"100"被普通数字误匹配。
+    """
     if not raw:
         return None
     raw = raw.strip().replace(",", "").replace("，", "")
@@ -136,6 +139,13 @@ def load_config(path: str = "config.yaml") -> dict:
                 "delay_between_requests": 1.5,
                 "timeout": 15,
                 "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            },
+            "api": {
+                "fund_list_url": "",
+                "mobile_api_url": "",
+                "mobile_api_v2_url": "",
+                "status_page_url": "",
+                "detail_page_url": "",
             },
             "data": {
                 "fund_list_path": "fund_list.json",

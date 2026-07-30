@@ -1,6 +1,7 @@
 """通知模块：控制台输出、CSV 变更记录、Webhook 推送。"""
 
 import csv
+import ctypes
 import json
 import logging
 import os
@@ -11,8 +12,26 @@ import requests
 logger = logging.getLogger(__name__)
 
 def _use_color() -> bool:
-    """检测当前是否为交互终端（实时判断，适配输出重定向）。"""
-    return sys.stdout.isatty()
+    """检测当前终端是否支持 ANSI 颜色输出。
+
+    在 Windows 上，需要 Windows Terminal、PowerShell 5.1+ 或
+    启用了 Virtual Terminal Processing 的经典控制台。
+    """
+    if not sys.stdout.isatty():
+        return False
+    if sys.platform == "win32":
+        try:
+            kernel32 = ctypes.windll.kernel32
+            # 获取控制台模式
+            handle = kernel32.GetStdHandle(-11)  # STD_OUTPUT_HANDLE
+            mode = ctypes.c_uint32()
+            if kernel32.GetConsoleMode(handle, ctypes.byref(mode)):
+                # ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004
+                return bool(mode.value & 0x0004)
+            return False
+        except Exception:
+            return False
+    return True
 
 INDEX_LABELS = {"nasdaq100": "纳斯达克100", "sp500": "标普500"}
 STATUS_COLORS = {
@@ -67,7 +86,7 @@ def _build_status_table(results: list[dict], with_color: bool = True) -> list[st
         display_status = _color_status(status) if with_color else status
         limit = r.get("purchase_limit")
         limit_str = f"¥{limit:,.0f}" if limit else ""
-        unknown_mark = " ⚠" if status == "未知" and with_color else " ?" if status == "未知" else ""
+        unknown_mark = (" ⚠" if with_color else " ?") if status == "未知" else ""
         lines.append(
             f"{code:<8} {name:<24} {index_label:<10} "
             f"{display_status:<12}{unknown_mark} {limit_str}"

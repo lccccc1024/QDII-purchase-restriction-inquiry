@@ -6,6 +6,8 @@
 
 import logging
 
+from typing import Optional
+
 import matplotlib
 
 matplotlib.use("Agg")
@@ -46,7 +48,7 @@ INDEX_CN = {"nasdaq100": "纳斯达克100", "sp500": "标普500"}
 
 # ── 字体检测 ─────────────────────────────────────
 
-def _get_serif_font() -> FontProperties | None:
+def _get_serif_font() -> Optional[FontProperties]:
     """返回最佳衬线字体（用于英文标题）。"""
     available = {f.name for f in fm.fontManager.ttflist}
     for name in ["Georgia", "Palatino Linotype", "Times New Roman"]:
@@ -74,15 +76,21 @@ def _setup_cjk():
 # ── 辅助函数 ─────────────────────────────────────
 
 def _shorten_name(name: str, max_len: int = 16) -> str:
+    """精简基金简称，移除通用后缀以缩短长度，避免硬编码误删重要信息。"""
     for cut in ["发起式联接", "ETF发起式联接", "ETF联接", "发起联接",
                 "指数发起式", "指数发起", "联接"]:
         name = name.replace(cut, "")
     if len(name) > max_len:
-        name = name[: max_len - 1] + "…"
+        # 优先从尾部截断前保留关键标识（如末尾的 A/C 份额标记）
+        suffix = ""
+        if name and name[-1] in ("A", "C", "B"):
+            suffix = name[-1]
+            name = name[:-1]
+        name = name[: max_len - 1 - len(suffix)] + "…" + suffix
     return name
 
 
-def _format_limit(status: str, limit: float | None) -> str:
+def _format_limit(status: str, limit: Optional[float]) -> str:
     if limit is None:
         if status == "暂停申购":
             return "暂停"

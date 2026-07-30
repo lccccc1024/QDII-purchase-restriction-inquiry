@@ -6,6 +6,17 @@ scan:
   timeout: 15                   # 单次HTTP请求超时（秒）
   user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
 
+# API 接口地址（可自定义覆盖默认值）
+api:
+  # fundcode_search.js 全市场基金列表
+  fund_list_url: ""
+  # 手机端 JSON API v1/v2（版本号变化时可在此更新）
+  mobile_api_url: ""
+  mobile_api_v2_url: ""
+  # 基金状态页面 / 详情页（通常不需修改）
+  status_page_url: ""
+  detail_page_url: ""
+
 data:
   fund_list_path: "fund_list.json"
   status_log_path: "status_log.json"
