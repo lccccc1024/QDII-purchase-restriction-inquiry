@@ -37,6 +37,8 @@ FUND_DETAIL_PAGE = "https://fund.eastmoney.com/{code}.html"
 FUND_MOBILE_API = "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNNBasicInformation?FCODE={code}&deviceid=ios_efund&plat=iOS&product=EFund&version=7.0.0"
 # 备用手机端 API v2
 FUND_MOBILE_API_V2 = "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFundBaseInfoNew?FCODE={code}&deviceid=android&plat=Android&product=EFund&version=7.3.8"
+# 备用数据源：蛋卷基金（雪球旗下，与天天基金独立的反爬体系）
+FUND_DANJUAN_API = "https://danjuanfunds.com/djapi/fund/{code}"
 
 
 def create_session(config: dict) -> requests.Session:
@@ -52,6 +54,7 @@ def create_session(config: dict) -> requests.Session:
     s.api_mobile_v2_url = api_cfg.get("mobile_api_v2_url") or FUND_MOBILE_API_V2
     s.api_status_page_url = api_cfg.get("status_page_url") or FUND_STATUS_PAGE
     s.api_detail_page_url = api_cfg.get("detail_page_url") or FUND_DETAIL_PAGE
+    s.api_danjuan_url = api_cfg.get("danjuan_url") or FUND_DANJUAN_API
     s.timeout = config.get("scan", {}).get("timeout", 15)
     s.headers["User-Agent"] = config.get("scan", {}).get(
         "user_agent",
@@ -259,6 +262,53 @@ def _fetch_mobile_api(session, code, url_template, source_name,
         return None
 
 
+def _try_danjuan_api(session: requests.Session, code: str) -> Optional[dict]:
+    """尝试蛋卷基金 JSON API（备用数据源，天天基金反爬时可用）。
+
+    蛋卷接口返回数字状态码而非文字，经实测 47 只基金对照映射如下:
+      declare_status=0                    -> 暂停申购
+      declare_status=1 且 fund_status=0   -> 限制大额申购
+      declare_status=1 且 fund_status=5   -> 开放申购
+    注意：蛋卷接口不提供限额金额，备用路径下限额为空（状态优先于限额）。
+    """
+    url = session.api_danjuan_url.format(code=code)
+    try:
+        resp = session.get(
+            url, timeout=getattr(session, "timeout", 15),
+            headers={"Referer": "https://danjuanfunds.com/"},
+        )
+        if resp.status_code != 200:
+            return None
+        data = resp.json()
+        info = data.get("data") or {}
+        if not info:
+            return None
+        declare = str(info.get("declare_status", ""))
+        fund_st = str(info.get("fund_status", ""))
+        if declare == "0":
+            status_text = "暂停申购"
+        elif declare == "1" and fund_st == "0":
+            status_text = "限制大额申购"
+        elif declare == "1":
+            status_text = "开放申购"
+        else:
+            return None
+        status = normalize_status(status_text)
+        if status == PurchaseStatus.UNKNOWN:
+            return None
+        return {
+            "purchase_status": status,
+            "purchase_limit": None,
+            "effective_date": "",
+            "announcement": "",
+            "raw_status_text": status_text,
+            "source": "danjuan_api",
+        }
+    except Exception as e:
+        logger.debug(f"蛋卷API获取失败 {code}: {e}")
+        return None
+
+
 def _try_status_page(session: requests.Session, code: str) -> Optional[dict]:
     """解析基金申购状态页面 HTML。"""
     url = session.api_status_page_url.format(code=code)
@@ -386,7 +436,7 @@ def _try_detail_page(session: requests.Session, code: str) -> Optional[dict]:
 
 def get_fund_purchase_status(session: requests.Session, code: str) -> dict:
     """获取单只基金的申购状态，按优先级尝试多个数据源。"""
-    for fetcher in (_try_mobile_api, _try_mobile_api_v2, _try_status_page, _try_detail_page):
+    for fetcher in (_try_mobile_api, _try_mobile_api_v2, _try_danjuan_api, _try_status_page, _try_detail_page):
         result = fetcher(session, code)
         if result and result.get("purchase_status") != PurchaseStatus.UNKNOWN:
             return result

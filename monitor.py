@@ -4,7 +4,7 @@
 用法:
   python monitor.py --init              # 仅重建基金列表
   python monitor.py --once              # 单次检查所有基金申购状态
-  python monitor.py --once --init       # 重建列表 + 单次检查
+  python monitor.py --once --email      # 单次检查 + 有变化时邮件推送
   python monitor.py --daemon --interval 1800  # 常驻监控，每1800秒扫描一次
 """
 
@@ -19,7 +19,7 @@ if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-import chart as chart_maker
+import email_sender
 import fetcher
 import notifier
 from utils import (
@@ -104,7 +104,15 @@ def compare_status(
             })
             continue
         status_changed = new_r["purchase_status"] != old_r.get("purchase_status")
-        limit_changed = new_r.get("purchase_limit") != old_r.get("purchase_limit")
+        new_limit = new_r.get("purchase_limit")
+        old_limit = old_r.get("purchase_limit")
+        # 限额对比仅在两侧都有值时才有意义：
+        # 天天源返回真实限额，蛋卷备用源不提供限额(None)，
+        # 若一侧为 None 就报"限额变化"会产生跨数据源的系统性误报。
+        limit_changed = (
+            old_limit is not None and new_limit is not None
+            and new_limit != old_limit
+        )
         if status_changed or limit_changed:
             changes.append({
                 **new_r,
@@ -116,7 +124,7 @@ def compare_status(
     return changes
 
 
-def run_once(config: dict, session, do_init: bool = False, do_chart: bool = False, interactive: bool = True):
+def run_once(config: dict, session, do_init: bool = False, send_email: bool = False, interactive: bool = True):
     """执行一次完整扫描。"""
     if do_init or not _load_fund_list(config):
         init_fund_list(config, session, interactive=interactive)
@@ -158,13 +166,15 @@ def run_once(config: dict, session, do_init: bool = False, do_chart: bool = Fals
     save_json(status_path, valid_results)
     logger.info(f"状态快照已保存到 {status_path} ({len(valid_results)}/{len(results)} 只)")
 
-    # 图表（需要在 status_log 保存之后）
-    if do_chart:
-        chart_path = config["data"].get("chart_path", "chart.png")
-        chart_maker.generate(output_path=chart_path)
+    # 邮件推送：仅在有变化时发送（无变化不发，避免噪音邮件）
+    if send_email:
+        if changes:
+            email_sender.send_monitor_email(config, changes, results)
+        else:
+            logger.info("未检测到变化，跳过邮件推送。")
 
 
-def run_daemon(config: dict, session, interval: int, do_chart: bool = False):
+def run_daemon(config: dict, session, interval: int, send_email: bool = False):
     """常驻监控模式。"""
     logger.info(f"🔄 常驻监控启动，间隔 {interval} 秒")
     # 在 Windows 上使用退出标志捕获 Ctrl+C，确保优雅退出
@@ -180,7 +190,7 @@ def run_daemon(config: dict, session, interval: int, do_chart: bool = False):
             pass
     while True:
         try:
-            run_once(config, session, do_init=False, do_chart=do_chart, interactive=False)
+            run_once(config, session, do_init=False, send_email=send_email, interactive=False)
         except KeyboardInterrupt:
             logger.info("收到中断信号，退出监控。")
             break
@@ -225,11 +235,8 @@ def main():
         "--init", action="store_true", help="重新发现并保存基金列表"
     )
     parser.add_argument(
-        "--chart", action="store_true", help="扫描后生成图表"
-    )
-    parser.add_argument(
-        "--chart-only", action="store_true",
-        help="仅用上次 status_log.json 生成图表（不扫描）"
+        "--email", action="store_true",
+        help="检测到变化时通过 Gmail 发送邮件（需设置 GMAIL_USER / GMAIL_APP_PASSWORD 环境变量）"
     )
     parser.add_argument(
         "--config", default="config.yaml", help="配置文件路径"
@@ -241,16 +248,7 @@ def main():
     config = load_config(args.config)
     setup_logging(log_file=config["data"].get("log_file", "monitor.log"))
 
-    chart_path = config["data"].get("chart_path", "chart.png")
-
-    # --chart-only: 仅生成图表，不扫描
-    if getattr(args, "chart_only", False):
-        print("\n📊 正在从最近扫描数据生成图表...")
-        chart_maker.generate(output_path=chart_path)
-        print(f"✅ 图表已保存至 {chart_path}\n")
-        return
-
-    if not args.once and not args.daemon and not args.init and not args.chart:
+    if not args.once and not args.daemon and not args.init:
         # 默认：单次扫描
         args.once = True
         if not os.path.exists("fund_list.json"):
@@ -259,15 +257,13 @@ def main():
     # 创建 HTTP 会话
     session = fetcher.create_session(config)
 
-    do_chart = getattr(args, "chart", False)
-
     if args.daemon:
         interval = args.interval or config.get("scan", {}).get("interval", 1800)
         if args.init:
             init_fund_list(config, session, interactive=False)
-        run_daemon(config, session, interval, do_chart=do_chart)
+        run_daemon(config, session, interval, send_email=args.email)
     elif args.once:
-        run_once(config, session, do_init=args.init, do_chart=do_chart)
+        run_once(config, session, do_init=args.init, send_email=args.email)
     elif args.init:
         init_fund_list(config, session, interactive=True)
 

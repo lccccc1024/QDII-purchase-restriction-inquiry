@@ -1,0 +1,54 @@
+name: Daily Fund Monitor
+
+on:
+  schedule:
+    # UTC 10:00 = 北京时间 18:00
+    - cron: "0 10 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fund-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run monitor scan
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python monitor.py --once --email
+
+      - name: Commit status snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # changelog.csv 仅在有变化时生成；无变化时只提交快照
+          if [ -f changelog.csv ]; then
+            git add status_log.json changelog.csv
+          else
+            git add status_log.json
+          fi
+          if git diff --cached --quiet; then
+            echo "::notice::快照无变化，无需提交"
+          else
+            git commit -m "chore: 更新基金监控快照 $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+          fi

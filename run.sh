@@ -28,17 +28,17 @@ case "$MODE" in
         ;;
     once)
         if [ ! -f "$(dirname "$0")/fund_list.json" ]; then
-            $PYTHON "$(dirname "$0")/monitor.py" --init --once --chart
+            $PYTHON "$(dirname "$0")/monitor.py" --init --once
         else
-            $PYTHON "$(dirname "$0")/monitor.py" --once --chart
+            $PYTHON "$(dirname "$0")/monitor.py" --once
         fi
         ;;
     full)
-        $PYTHON "$(dirname "$0")/monitor.py" --init --once --chart
+        $PYTHON "$(dirname "$0")/monitor.py" --init --once
         ;;
     daemon)
         INTERVAL="${2:-1800}"
-        $PYTHON "$(dirname "$0")/monitor.py" --daemon --interval "$INTERVAL" --chart
+        $PYTHON "$(dirname "$0")/monitor.py" --daemon --interval "$INTERVAL"
         ;;
     *)
         echo "用法:"

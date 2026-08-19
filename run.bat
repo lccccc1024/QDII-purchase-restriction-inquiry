@@ -70,9 +70,9 @@ cls
 echo 正在扫描全部基金，请稍候...
 echo.
 if not exist fund_list.json (
-    python monitor.py --init --once --chart
+    python monitor.py --init --once
 ) else (
-    python monitor.py --once --chart
+    python monitor.py --once
 )
 echo.
 echo ==========================================
@@ -93,10 +93,10 @@ goto :menu
 :daemon
 cls
 echo 启动常驻监控（每30分钟扫描一次）...
-echo 每次扫描后自动生成报告和图表。
+echo 每次扫描后自动生成报告。
 echo 按 Ctrl+C 可随时停止。
 echo.
-python monitor.py --daemon --interval 1800 --chart
+python monitor.py --daemon --interval 1800
 pause
 goto :menu
 
@@ -105,15 +105,15 @@ goto :menu
 if "%1"=="init"    python monitor.py --init
 if "%1"=="once" (
     if not exist fund_list.json (
-        python monitor.py --init --once --chart
+        python monitor.py --init --once
     ) else (
-        python monitor.py --once --chart
+        python monitor.py --once
     )
 )
-if "%1"=="full"    python monitor.py --init --once --chart
+if "%1"=="full"    python monitor.py --init --once
 if "%1"=="daemon" (
     if "%2"=="" (
-        python monitor.py --daemon --interval 1800 --chart
+        python monitor.py --daemon --interval 1800
     ) else (
         echo %2|findstr /r "^[0-9][0-9]*$" >nul
         if %errorlevel% neq 0 (
@@ -121,7 +121,7 @@ if "%1"=="daemon" (
             pause
             exit /b 1
         )
-        python monitor.py --daemon --interval %2 --chart
+        python monitor.py --daemon --interval %2
     )
 )
 echo.

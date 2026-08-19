@@ -13,6 +13,8 @@ api:
   # 手机端 JSON API v1/v2（版本号变化时可在此更新）
   mobile_api_url: ""
   mobile_api_v2_url: ""
+  # 备用数据源：蛋卷基金（天天基金反爬时使用）
+  danjuan_url: ""
   # 基金状态页面 / 详情页（通常不需修改）
   status_page_url: ""
   detail_page_url: ""
@@ -22,12 +24,19 @@ data:
   status_log_path: "status_log.json"
   changelog_path: "changelog.csv"
   report_path: "report.txt"
-  chart_path: "chart.png"
   log_file: "monitor.log"
 
 notify:
   webhook_url: ""               # Webhook 地址（留空则禁用）
   webhook_type: "dingtalk"      # dingtalk / feishu / serverchan
+
+email:
+  smtp_host: "smtp.gmail.com"
+  smtp_port: 587
+  sender: "lcandfq@gmail.com"   # 发件 Gmail 地址
+  recipient: "lcandfq@gmail.com"  # 收件人（多个用逗号分隔）
+  # 注意：Gmail 密码/应用专用密码请通过环境变量 GMAIL_USER / GMAIL_APP_PASSWORD 提供，
+  # 切勿写入本文件（GitHub Actions 中配置为 Secrets）。
 
 proxy:
   http: ""                      # 如 "http://127.0.0.1:7890"

@@ -5,11 +5,9 @@ __pycache__/
 dist/
 build/
 
-# 运行时生成的数据文件
-status_log.json
-changelog.csv
+# 运行时生成的数据文件（status_log.json / changelog.csv 需提交回仓库，
+# 作为 GitHub Actions 每日扫描的变化检测基线，故不忽略）
 report.txt
-chart.png
 monitor.log
 
 # 日志通用规则
@@ -24,6 +22,7 @@ monitor.log
 # 开发工具配置
 .claude/
 .codegraph/
+.reasonix/
 
 # 操作系统
 Thumbs.db

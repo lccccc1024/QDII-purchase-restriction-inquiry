@@ -144,6 +144,7 @@ def load_config(path: str = "config.yaml") -> dict:
                 "fund_list_url": "",
                 "mobile_api_url": "",
                 "mobile_api_v2_url": "",
+                "danjuan_url": "",
                 "status_page_url": "",
                 "detail_page_url": "",
             },
@@ -152,10 +153,15 @@ def load_config(path: str = "config.yaml") -> dict:
                 "status_log_path": "status_log.json",
                 "changelog_path": "changelog.csv",
                 "report_path": "report.txt",
-                "chart_path": "chart.png",
                 "log_file": "monitor.log",
             },
             "notify": {"webhook_url": "", "webhook_type": "dingtalk"},
+            "email": {
+                "smtp_host": "smtp.gmail.com",
+                "smtp_port": 587,
+                "sender": "",
+                "recipient": "",
+            },
             "proxy": {"http": "", "https": ""},
         }
     with open(path, "r", encoding="utf-8") as f:
