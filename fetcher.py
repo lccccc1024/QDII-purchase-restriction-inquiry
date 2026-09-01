@@ -435,11 +435,34 @@ def _try_detail_page(session: requests.Session, code: str) -> Optional[dict]:
 
 
 def get_fund_purchase_status(session: requests.Session, code: str) -> dict:
-    """获取单只基金的申购状态，按优先级尝试多个数据源。"""
-    for fetcher in (_try_mobile_api, _try_mobile_api_v2, _try_danjuan_api, _try_status_page, _try_detail_page):
+    """获取单只基金的申购状态，按优先级尝试多个数据源。
+
+    蛋卷备用源不提供限额(None)，若蛋卷成功但限额为空，
+    继续尝试 detail_page 补充真实限额。
+    """
+    primary_sources = (_try_mobile_api, _try_mobile_api_v2, _try_danjuan_api)
+    fallback_sources = (_try_status_page, _try_detail_page)
+
+    # 先尝试主源
+    for fetcher in primary_sources:
+        result = fetcher(session, code)
+        if result and result.get("purchase_status") != PurchaseStatus.UNKNOWN:
+            # 蛋卷成功但无限额 → 补充 detail_page
+            if result.get("purchase_limit") is None and fetcher == _try_danjuan_api:
+                for fb in fallback_sources:
+                    fb_result = fb(session, code)
+                    if fb_result and fb_result.get("purchase_limit") is not None:
+                        result["purchase_limit"] = fb_result["purchase_limit"]
+                        result["source"] = result["source"] + "+" + fb_result["source"]
+                        break
+            return result
+
+    # 主源全部失败 → 尝试备用源
+    for fetcher in fallback_sources:
         result = fetcher(session, code)
         if result and result.get("purchase_status") != PurchaseStatus.UNKNOWN:
             return result
+
     # 所有方式均失败
     return {
         "purchase_status": PurchaseStatus.UNKNOWN,
