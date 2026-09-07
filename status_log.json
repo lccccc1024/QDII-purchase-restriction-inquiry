@@ -3,13 +3,13 @@
     "code": "000834",
     "name": "大成纳斯达克100ETF联接(QDII)A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:28:48+08:00"
+    "checked_at": "2026-09-07T23:38:06+08:00"
   },
   {
     "code": "006075",
@@ -21,79 +21,79 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:28:51+08:00"
+    "checked_at": "2026-09-07T23:38:09+08:00"
   },
   {
     "code": "006479",
     "name": "广发纳斯达克100ETF联接人民币(QDII)C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 5.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:28:55+08:00"
+    "checked_at": "2026-09-07T23:38:12+08:00"
   },
   {
     "code": "007721",
     "name": "天弘标普500发起(QDII-FOF)A",
     "index": "sp500",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 100.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:28:58+08:00"
+    "checked_at": "2026-09-07T23:38:15+08:00"
   },
   {
     "code": "007722",
     "name": "天弘标普500发起(QDII-FOF)C",
     "index": "sp500",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 100.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:03+08:00"
+    "checked_at": "2026-09-07T23:38:18+08:00"
   },
   {
     "code": "008401",
     "name": "大成标普500等权重指数(QDII)C人民币",
     "index": "sp500",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:06+08:00"
+    "checked_at": "2026-09-07T23:38:21+08:00"
   },
   {
     "code": "008971",
     "name": "大成纳斯达克100ETF联接(QDII)C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:10+08:00"
+    "checked_at": "2026-09-07T23:38:24+08:00"
   },
   {
     "code": "012752",
     "name": "建信纳斯达克100指数(QDII)C人民币",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:13+08:00"
+    "checked_at": "2026-09-07T23:38:27+08:00"
   },
   {
     "code": "012860",
@@ -105,7 +105,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:17+08:00"
+    "checked_at": "2026-09-07T23:38:30+08:00"
   },
   {
     "code": "012870",
@@ -117,19 +117,19 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:21+08:00"
+    "checked_at": "2026-09-07T23:38:34+08:00"
   },
   {
     "code": "014978",
     "name": "华安纳斯达克100ETF联接(QDII)C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:25+08:00"
+    "checked_at": "2026-09-07T23:38:37+08:00"
   },
   {
     "code": "015299",
@@ -141,7 +141,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:28+08:00"
+    "checked_at": "2026-09-07T23:38:40+08:00"
   },
   {
     "code": "015300",
@@ -153,55 +153,55 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:35+08:00"
+    "checked_at": "2026-09-07T23:38:43+08:00"
   },
   {
     "code": "016055",
     "name": "博时纳斯达克100ETF发起式联接(QDII)A人民币",
     "index": "nasdaq100",
     "purchase_status": "暂停申购",
-    "purchase_limit": 100.0,
+    "purchase_limit": null,
     "effective_date": "",
     "announcement": "",
     "raw_status_text": "暂停申购",
-    "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:40+08:00"
+    "source": "danjuan_api",
+    "checked_at": "2026-09-07T23:38:47+08:00"
   },
   {
     "code": "016057",
     "name": "博时纳斯达克100ETF发起式联接(QDII)C人民币",
     "index": "nasdaq100",
     "purchase_status": "暂停申购",
-    "purchase_limit": 100.0,
+    "purchase_limit": null,
     "effective_date": "",
     "announcement": "",
     "raw_status_text": "暂停申购",
-    "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:44+08:00"
+    "source": "danjuan_api",
+    "checked_at": "2026-09-07T23:38:50+08:00"
   },
   {
     "code": "016452",
     "name": "南方纳斯达克100指数发起(QDII)A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:48+08:00"
+    "checked_at": "2026-09-07T23:38:53+08:00"
   },
   {
     "code": "016453",
     "name": "南方纳斯达克100指数发起(QDII)C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:53+08:00"
+    "checked_at": "2026-09-07T23:38:56+08:00"
   },
   {
     "code": "016532",
@@ -213,7 +213,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:55+08:00"
+    "checked_at": "2026-09-07T23:38:59+08:00"
   },
   {
     "code": "016533",
@@ -225,7 +225,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:29:59+08:00"
+    "checked_at": "2026-09-07T23:39:01+08:00"
   },
   {
     "code": "017028",
@@ -237,7 +237,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-06T21:30:03+08:00"
+    "checked_at": "2026-09-07T23:39:04+08:00"
   },
   {
     "code": "017030",
@@ -249,43 +249,43 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-06T21:30:06+08:00"
+    "checked_at": "2026-09-07T23:39:07+08:00"
   },
   {
     "code": "017641",
     "name": "摩根标普500指数(QDII)人民币A",
     "index": "sp500",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:09+08:00"
+    "checked_at": "2026-09-07T23:39:10+08:00"
   },
   {
     "code": "018043",
     "name": "天弘纳斯达克100指数发起(QDII)A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 100.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:12+08:00"
+    "checked_at": "2026-09-07T23:39:13+08:00"
   },
   {
     "code": "018044",
     "name": "天弘纳斯达克100指数发起(QDII)C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 100.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:16+08:00"
+    "checked_at": "2026-09-07T23:39:16+08:00"
   },
   {
     "code": "018064",
@@ -297,7 +297,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:19+08:00"
+    "checked_at": "2026-09-07T23:39:19+08:00"
   },
   {
     "code": "018065",
@@ -309,175 +309,175 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:22+08:00"
+    "checked_at": "2026-09-07T23:39:22+08:00"
   },
   {
     "code": "018966",
     "name": "汇添富纳斯达克100ETF发起式联接(QDII)人民币A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:25+08:00"
+    "checked_at": "2026-09-07T23:39:25+08:00"
   },
   {
     "code": "018967",
     "name": "汇添富纳斯达克100ETF发起式联接(QDII)人民币C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:28+08:00"
+    "checked_at": "2026-09-07T23:39:28+08:00"
   },
   {
     "code": "019172",
     "name": "摩根纳斯达克100指数(QDII)人民币A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:31+08:00"
+    "checked_at": "2026-09-07T23:39:31+08:00"
   },
   {
     "code": "019173",
     "name": "摩根纳斯达克100指数(QDII)人民币C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:34+08:00"
+    "checked_at": "2026-09-07T23:39:34+08:00"
   },
   {
     "code": "019305",
     "name": "摩根标普500指数(QDII)人民币C",
     "index": "sp500",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:37+08:00"
+    "checked_at": "2026-09-07T23:39:37+08:00"
   },
   {
     "code": "019441",
     "name": "万家纳斯达克100指数发起式(QDII)A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:40+08:00"
+    "checked_at": "2026-09-07T23:39:40+08:00"
   },
   {
     "code": "019442",
     "name": "万家纳斯达克100指数发起式(QDII)C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:43+08:00"
+    "checked_at": "2026-09-07T23:39:43+08:00"
   },
   {
     "code": "019524",
     "name": "华泰柏瑞纳斯达克100ETF发起式联接(QDII)A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:46+08:00"
+    "checked_at": "2026-09-07T23:39:46+08:00"
   },
   {
     "code": "019525",
     "name": "华泰柏瑞纳斯达克100ETF发起式联接(QDII)C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:49+08:00"
+    "checked_at": "2026-09-07T23:39:49+08:00"
   },
   {
     "code": "019547",
     "name": "招商纳斯达克100ETF发起式联接(QDII)A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:52+08:00"
+    "checked_at": "2026-09-07T23:39:52+08:00"
   },
   {
     "code": "019548",
     "name": "招商纳斯达克100ETF发起式联接(QDII)C",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:55+08:00"
+    "checked_at": "2026-09-07T23:39:55+08:00"
   },
   {
     "code": "019736",
     "name": "宝盈纳斯达克100指数发起(QDII)A人民币",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
-    "purchase_limit": 10.0,
+    "purchase_status": "限制大额申购",
+    "purchase_limit": 200.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:30:58+08:00"
+    "checked_at": "2026-09-07T23:39:58+08:00"
   },
   {
     "code": "019737",
     "name": "宝盈纳斯达克100指数发起(QDII)C人民币",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
-    "purchase_limit": 10.0,
+    "purchase_status": "限制大额申购",
+    "purchase_limit": 200.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:31:01+08:00"
+    "checked_at": "2026-09-07T23:40:01+08:00"
   },
   {
     "code": "040046",
     "name": "华安纳斯达克100ETF联接(QDII)A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:31:04+08:00"
+    "checked_at": "2026-09-07T23:40:04+08:00"
   },
   {
     "code": "050025",
@@ -489,31 +489,31 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:31:07+08:00"
+    "checked_at": "2026-09-07T23:40:07+08:00"
   },
   {
     "code": "096001",
     "name": "大成标普500等权重指数(QDII)A人民币",
     "index": "sp500",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:31:10+08:00"
+    "checked_at": "2026-09-07T23:40:09+08:00"
   },
   {
     "code": "160213",
     "name": "国泰纳斯达克100指数",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 100.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:31:13+08:00"
+    "checked_at": "2026-09-07T23:40:12+08:00"
   },
   {
     "code": "161125",
@@ -525,7 +525,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:31:16+08:00"
+    "checked_at": "2026-09-07T23:40:15+08:00"
   },
   {
     "code": "161130",
@@ -537,30 +537,30 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:31:19+08:00"
+    "checked_at": "2026-09-07T23:40:18+08:00"
   },
   {
     "code": "270042",
     "name": "广发纳斯达克100ETF联接人民币(QDII)A",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 5.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:31:22+08:00"
+    "checked_at": "2026-09-07T23:40:21+08:00"
   },
   {
     "code": "539001",
     "name": "建信纳斯达克100指数(QDII)A人民币",
     "index": "nasdaq100",
-    "purchase_status": "暂停申购",
+    "purchase_status": "限制大额申购",
     "purchase_limit": 10.0,
     "effective_date": "",
     "announcement": "",
-    "raw_status_text": "暂停申购",
+    "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-06T21:31:25+08:00"
+    "checked_at": "2026-09-07T23:40:24+08:00"
   }
 ]
