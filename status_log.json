@@ -9,7 +9,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:06+08:00"
+    "checked_at": "2026-09-08T22:15:59+08:00"
   },
   {
     "code": "006075",
@@ -21,7 +21,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:09+08:00"
+    "checked_at": "2026-09-08T22:16:02+08:00"
   },
   {
     "code": "006479",
@@ -33,7 +33,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:12+08:00"
+    "checked_at": "2026-09-08T22:16:05+08:00"
   },
   {
     "code": "007721",
@@ -45,7 +45,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:15+08:00"
+    "checked_at": "2026-09-08T22:16:09+08:00"
   },
   {
     "code": "007722",
@@ -57,19 +57,19 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:18+08:00"
+    "checked_at": "2026-09-08T22:16:12+08:00"
   },
   {
     "code": "008401",
     "name": "大成标普500等权重指数(QDII)C人民币",
     "index": "sp500",
     "purchase_status": "限制大额申购",
-    "purchase_limit": 10.0,
+    "purchase_limit": 100.0,
     "effective_date": "",
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:21+08:00"
+    "checked_at": "2026-09-08T22:16:15+08:00"
   },
   {
     "code": "008971",
@@ -81,7 +81,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:24+08:00"
+    "checked_at": "2026-09-08T22:16:19+08:00"
   },
   {
     "code": "012752",
@@ -93,7 +93,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:27+08:00"
+    "checked_at": "2026-09-08T22:16:22+08:00"
   },
   {
     "code": "012860",
@@ -105,7 +105,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:30+08:00"
+    "checked_at": "2026-09-08T22:16:26+08:00"
   },
   {
     "code": "012870",
@@ -117,7 +117,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:34+08:00"
+    "checked_at": "2026-09-08T22:16:29+08:00"
   },
   {
     "code": "014978",
@@ -129,7 +129,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:37+08:00"
+    "checked_at": "2026-09-08T22:16:33+08:00"
   },
   {
     "code": "015299",
@@ -141,7 +141,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:40+08:00"
+    "checked_at": "2026-09-08T22:16:38+08:00"
   },
   {
     "code": "015300",
@@ -153,7 +153,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:43+08:00"
+    "checked_at": "2026-09-08T22:16:42+08:00"
   },
   {
     "code": "016055",
@@ -165,7 +165,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-07T23:38:47+08:00"
+    "checked_at": "2026-09-08T22:16:52+08:00"
   },
   {
     "code": "016057",
@@ -177,7 +177,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-07T23:38:50+08:00"
+    "checked_at": "2026-09-08T22:16:56+08:00"
   },
   {
     "code": "016452",
@@ -189,7 +189,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:53+08:00"
+    "checked_at": "2026-09-08T22:16:59+08:00"
   },
   {
     "code": "016453",
@@ -201,7 +201,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:56+08:00"
+    "checked_at": "2026-09-08T22:17:02+08:00"
   },
   {
     "code": "016532",
@@ -213,7 +213,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:38:59+08:00"
+    "checked_at": "2026-09-08T22:17:05+08:00"
   },
   {
     "code": "016533",
@@ -225,7 +225,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:01+08:00"
+    "checked_at": "2026-09-08T22:17:09+08:00"
   },
   {
     "code": "017028",
@@ -237,7 +237,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-07T23:39:04+08:00"
+    "checked_at": "2026-09-08T22:17:13+08:00"
   },
   {
     "code": "017030",
@@ -249,7 +249,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-07T23:39:07+08:00"
+    "checked_at": "2026-09-08T22:17:16+08:00"
   },
   {
     "code": "017641",
@@ -261,7 +261,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:10+08:00"
+    "checked_at": "2026-09-08T22:17:19+08:00"
   },
   {
     "code": "018043",
@@ -273,7 +273,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:13+08:00"
+    "checked_at": "2026-09-08T22:17:22+08:00"
   },
   {
     "code": "018044",
@@ -285,7 +285,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:16+08:00"
+    "checked_at": "2026-09-08T22:17:25+08:00"
   },
   {
     "code": "018064",
@@ -297,7 +297,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:19+08:00"
+    "checked_at": "2026-09-08T22:17:29+08:00"
   },
   {
     "code": "018065",
@@ -309,7 +309,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:22+08:00"
+    "checked_at": "2026-09-08T22:17:32+08:00"
   },
   {
     "code": "018966",
@@ -321,7 +321,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:25+08:00"
+    "checked_at": "2026-09-08T22:17:36+08:00"
   },
   {
     "code": "018967",
@@ -333,7 +333,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:28+08:00"
+    "checked_at": "2026-09-08T22:17:40+08:00"
   },
   {
     "code": "019172",
@@ -345,7 +345,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:31+08:00"
+    "checked_at": "2026-09-08T22:17:43+08:00"
   },
   {
     "code": "019173",
@@ -357,7 +357,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:34+08:00"
+    "checked_at": "2026-09-08T22:17:47+08:00"
   },
   {
     "code": "019305",
@@ -369,31 +369,31 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:37+08:00"
+    "checked_at": "2026-09-08T22:17:50+08:00"
   },
   {
     "code": "019441",
     "name": "万家纳斯达克100指数发起式(QDII)A",
     "index": "nasdaq100",
     "purchase_status": "限制大额申购",
-    "purchase_limit": 10.0,
+    "purchase_limit": 5000.0,
     "effective_date": "",
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:40+08:00"
+    "checked_at": "2026-09-08T22:17:54+08:00"
   },
   {
     "code": "019442",
     "name": "万家纳斯达克100指数发起式(QDII)C",
     "index": "nasdaq100",
     "purchase_status": "限制大额申购",
-    "purchase_limit": 10.0,
+    "purchase_limit": 5000.0,
     "effective_date": "",
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:43+08:00"
+    "checked_at": "2026-09-08T22:17:58+08:00"
   },
   {
     "code": "019524",
@@ -405,7 +405,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:46+08:00"
+    "checked_at": "2026-09-08T22:18:01+08:00"
   },
   {
     "code": "019525",
@@ -417,7 +417,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:49+08:00"
+    "checked_at": "2026-09-08T22:18:06+08:00"
   },
   {
     "code": "019547",
@@ -429,7 +429,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:52+08:00"
+    "checked_at": "2026-09-08T22:18:09+08:00"
   },
   {
     "code": "019548",
@@ -441,7 +441,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:55+08:00"
+    "checked_at": "2026-09-08T22:18:12+08:00"
   },
   {
     "code": "019736",
@@ -453,7 +453,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:39:58+08:00"
+    "checked_at": "2026-09-08T22:18:16+08:00"
   },
   {
     "code": "019737",
@@ -465,7 +465,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:40:01+08:00"
+    "checked_at": "2026-09-08T22:18:19+08:00"
   },
   {
     "code": "040046",
@@ -477,7 +477,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:40:04+08:00"
+    "checked_at": "2026-09-08T22:18:22+08:00"
   },
   {
     "code": "050025",
@@ -489,19 +489,19 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:40:07+08:00"
+    "checked_at": "2026-09-08T22:18:26+08:00"
   },
   {
     "code": "096001",
     "name": "大成标普500等权重指数(QDII)A人民币",
     "index": "sp500",
     "purchase_status": "限制大额申购",
-    "purchase_limit": 10.0,
+    "purchase_limit": 100.0,
     "effective_date": "",
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:40:09+08:00"
+    "checked_at": "2026-09-08T22:18:28+08:00"
   },
   {
     "code": "160213",
@@ -513,7 +513,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:40:12+08:00"
+    "checked_at": "2026-09-08T22:18:32+08:00"
   },
   {
     "code": "161125",
@@ -525,7 +525,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:40:15+08:00"
+    "checked_at": "2026-09-08T22:18:35+08:00"
   },
   {
     "code": "161130",
@@ -537,7 +537,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:40:18+08:00"
+    "checked_at": "2026-09-08T22:18:38+08:00"
   },
   {
     "code": "270042",
@@ -549,7 +549,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:40:21+08:00"
+    "checked_at": "2026-09-08T22:18:41+08:00"
   },
   {
     "code": "539001",
@@ -561,6 +561,6 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-07T23:40:24+08:00"
+    "checked_at": "2026-09-08T22:18:44+08:00"
   }
 ]
