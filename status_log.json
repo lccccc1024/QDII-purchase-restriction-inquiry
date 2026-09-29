@@ -9,7 +9,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:00:54+08:00"
+    "checked_at": "2026-09-30T00:24:34+08:00"
   },
   {
     "code": "006075",
@@ -21,7 +21,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:00:57+08:00"
+    "checked_at": "2026-09-30T00:24:56+08:00"
   },
   {
     "code": "006479",
@@ -33,7 +33,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:00+08:00"
+    "checked_at": "2026-09-30T00:25:14+08:00"
   },
   {
     "code": "007721",
@@ -45,7 +45,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:03+08:00"
+    "checked_at": "2026-09-30T00:25:33+08:00"
   },
   {
     "code": "007722",
@@ -57,7 +57,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:06+08:00"
+    "checked_at": "2026-09-30T00:25:51+08:00"
   },
   {
     "code": "008401",
@@ -69,7 +69,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:09+08:00"
+    "checked_at": "2026-09-30T00:26:12+08:00"
   },
   {
     "code": "008971",
@@ -81,7 +81,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:13+08:00"
+    "checked_at": "2026-09-30T00:26:37+08:00"
   },
   {
     "code": "012752",
@@ -93,7 +93,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:16+08:00"
+    "checked_at": "2026-09-30T00:27:09+08:00"
   },
   {
     "code": "012860",
@@ -105,7 +105,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:20+08:00"
+    "checked_at": "2026-09-30T00:27:20+08:00"
   },
   {
     "code": "012870",
@@ -117,7 +117,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:23+08:00"
+    "checked_at": "2026-09-30T00:27:24+08:00"
   },
   {
     "code": "014978",
@@ -129,7 +129,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:27+08:00"
+    "checked_at": "2026-09-30T00:27:27+08:00"
   },
   {
     "code": "015299",
@@ -141,7 +141,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:30+08:00"
+    "checked_at": "2026-09-30T00:27:32+08:00"
   },
   {
     "code": "015300",
@@ -153,7 +153,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:34+08:00"
+    "checked_at": "2026-09-30T00:27:37+08:00"
   },
   {
     "code": "016055",
@@ -165,7 +165,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-29T02:01:37+08:00"
+    "checked_at": "2026-09-30T00:27:40+08:00"
   },
   {
     "code": "016057",
@@ -177,7 +177,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-29T02:01:41+08:00"
+    "checked_at": "2026-09-30T00:27:43+08:00"
   },
   {
     "code": "016452",
@@ -189,7 +189,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:45+08:00"
+    "checked_at": "2026-09-30T00:27:48+08:00"
   },
   {
     "code": "016453",
@@ -201,7 +201,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:48+08:00"
+    "checked_at": "2026-09-30T00:27:51+08:00"
   },
   {
     "code": "016532",
@@ -213,7 +213,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:53+08:00"
+    "checked_at": "2026-09-30T00:27:54+08:00"
   },
   {
     "code": "016533",
@@ -225,7 +225,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:01:56+08:00"
+    "checked_at": "2026-09-30T00:27:58+08:00"
   },
   {
     "code": "017028",
@@ -237,7 +237,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-29T02:01:59+08:00"
+    "checked_at": "2026-09-30T00:28:02+08:00"
   },
   {
     "code": "017030",
@@ -249,7 +249,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api",
-    "checked_at": "2026-09-29T02:02:02+08:00"
+    "checked_at": "2026-09-30T00:28:05+08:00"
   },
   {
     "code": "017641",
@@ -261,7 +261,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:05+08:00"
+    "checked_at": "2026-09-30T00:28:08+08:00"
   },
   {
     "code": "018043",
@@ -273,7 +273,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:09+08:00"
+    "checked_at": "2026-09-30T00:28:12+08:00"
   },
   {
     "code": "018044",
@@ -285,7 +285,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:12+08:00"
+    "checked_at": "2026-09-30T00:28:16+08:00"
   },
   {
     "code": "018064",
@@ -297,7 +297,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:15+08:00"
+    "checked_at": "2026-09-30T00:28:19+08:00"
   },
   {
     "code": "018065",
@@ -309,7 +309,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:18+08:00"
+    "checked_at": "2026-09-30T00:28:22+08:00"
   },
   {
     "code": "018966",
@@ -321,7 +321,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:21+08:00"
+    "checked_at": "2026-09-30T00:28:25+08:00"
   },
   {
     "code": "018967",
@@ -333,7 +333,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:24+08:00"
+    "checked_at": "2026-09-30T00:28:28+08:00"
   },
   {
     "code": "019172",
@@ -345,7 +345,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:28+08:00"
+    "checked_at": "2026-09-30T00:28:33+08:00"
   },
   {
     "code": "019173",
@@ -357,7 +357,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:31+08:00"
+    "checked_at": "2026-09-30T00:28:36+08:00"
   },
   {
     "code": "019305",
@@ -369,7 +369,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:34+08:00"
+    "checked_at": "2026-09-30T00:28:39+08:00"
   },
   {
     "code": "019441",
@@ -381,7 +381,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:37+08:00"
+    "checked_at": "2026-09-30T00:28:42+08:00"
   },
   {
     "code": "019442",
@@ -393,7 +393,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:40+08:00"
+    "checked_at": "2026-09-30T00:28:46+08:00"
   },
   {
     "code": "019524",
@@ -405,7 +405,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:43+08:00"
+    "checked_at": "2026-09-30T00:28:50+08:00"
   },
   {
     "code": "019525",
@@ -417,7 +417,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:47+08:00"
+    "checked_at": "2026-09-30T00:28:54+08:00"
   },
   {
     "code": "019547",
@@ -429,7 +429,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:50+08:00"
+    "checked_at": "2026-09-30T00:28:57+08:00"
   },
   {
     "code": "019548",
@@ -441,7 +441,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:53+08:00"
+    "checked_at": "2026-09-30T00:29:00+08:00"
   },
   {
     "code": "019736",
@@ -453,7 +453,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:02:56+08:00"
+    "checked_at": "2026-09-30T00:29:04+08:00"
   },
   {
     "code": "019737",
@@ -465,7 +465,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:03:00+08:00"
+    "checked_at": "2026-09-30T00:29:07+08:00"
   },
   {
     "code": "040046",
@@ -477,7 +477,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:03:03+08:00"
+    "checked_at": "2026-09-30T00:29:11+08:00"
   },
   {
     "code": "050025",
@@ -489,7 +489,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:03:06+08:00"
+    "checked_at": "2026-09-30T00:29:14+08:00"
   },
   {
     "code": "096001",
@@ -501,7 +501,7 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:03:10+08:00"
+    "checked_at": "2026-09-30T00:29:17+08:00"
   },
   {
     "code": "160213",
@@ -513,7 +513,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:03:13+08:00"
+    "checked_at": "2026-09-30T00:29:20+08:00"
   },
   {
     "code": "161125",
@@ -525,7 +525,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:03:18+08:00"
+    "checked_at": "2026-09-30T00:29:24+08:00"
   },
   {
     "code": "161130",
@@ -537,7 +537,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:03:21+08:00"
+    "checked_at": "2026-09-30T00:29:27+08:00"
   },
   {
     "code": "270042",
@@ -549,7 +549,7 @@
     "announcement": "",
     "raw_status_text": "暂停申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:03:25+08:00"
+    "checked_at": "2026-09-30T00:29:30+08:00"
   },
   {
     "code": "539001",
@@ -561,6 +561,6 @@
     "announcement": "",
     "raw_status_text": "限制大额申购",
     "source": "danjuan_api+detail_page",
-    "checked_at": "2026-09-29T02:03:28+08:00"
+    "checked_at": "2026-09-30T00:29:33+08:00"
   }
 ]
