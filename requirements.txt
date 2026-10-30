@@ -1,4 +1,15 @@
-requests>=2.28.0
-beautifulsoup4>=4.11.0
-lxml>=4.9.0
-pyyaml>=6.0
+# 直接依赖
+requests==2.34.2
+beautifulsoup4==4.15.0
+lxml==6.1.3
+PyYAML==6.0.3
+
+# 传递依赖：一并钉死，保证 CI 与本地解析出同一套版本
+# 重新生成：pip install --dry-run --ignore-installed --report report.json -r requirements.txt
+# 然后按 report.json 里的 install[].metadata 更新本文件；Dependabot 会对这些行提更新 PR
+certifi==2026.10.23
+charset-normalizer==3.5.2
+idna==3.20
+soupsieve==3.0.4
+typing_extensions==4.16.0
+urllib3==2.8.0
