@@ -232,7 +232,10 @@ def _fetch_mobile_api(session, code, url_template, source_name,
         if resp.status_code != 200:
             return None
         data = resp.json()
-        if data.get("ErrCode") != 0:
+        # ErrCode 可能是整数 0，也可能是字符串 "0"。
+        # 用宽松比较，避免主数据源因为类型差异被静默跳过（那样会一路降级到不提供限额的备用源）。
+        err_code = data.get("ErrCode")
+        if err_code is not None and str(err_code).strip() not in ("0", ""):
             return None
         info = data.get("Data", {})
         if not info:
@@ -403,9 +406,13 @@ def _try_detail_page(session: requests.Session, code: str) -> Optional[dict]:
         if limit_m:
             limit_text = limit_m.group(1).strip()
 
-        # 方法2（兜底）: 在整页文本中搜索已知状态关键词
+        # 方法2（兜底）: 只在"交易状态"附近搜关键词。
+        # 整页搜索会被无关文字误伤——常见问题、购买须知、同类基金里出现"暂停申购"，
+        # 就会盖过真实状态（而且关键词顺序把"暂停"排在第一位，误判概率更高）。
         if not status_text:
-            all_text = soup.get_text()
+            all_text = soup.get_text(" ", strip=True)
+            anchor = all_text.find("交易状态")
+            window = all_text[anchor:anchor + 200] if anchor >= 0 else all_text
             for kw, mapped in [
                 ("暂停申购", "暂停申购"),
                 ("限制大额申购", "限制大额申购"),
@@ -413,7 +420,7 @@ def _try_detail_page(session: requests.Session, code: str) -> Optional[dict]:
                 ("限大额", "限制大额申购"),
                 ("开放申购", "开放申购"),
             ]:
-                if kw in all_text:
+                if kw in window:
                     status_text = mapped
                     break
 
