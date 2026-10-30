@@ -124,6 +124,24 @@ def compare_status(
     return changes
 
 
+def merge_snapshot(previous_records: list[dict], new_records: list[dict]) -> list[dict]:
+    """合并本轮结果与上一轮快照。
+
+    "未知"表示"这次没抓到"，而不是"状态变了"。
+    直接丢弃会让基金从快照里消失，下一轮成功时被误判为"(新增)"；
+    全部失败时更会把快照清空，恢复后一次性刷出几十条假变更。
+    因此未知结果保留上一轮的已知记录。
+    """
+    previous_map = {r["code"]: r for r in previous_records}
+    merged = []
+    for record in new_records:
+        if record["purchase_status"] != "未知":
+            merged.append(record)
+        elif record["code"] in previous_map:
+            merged.append(previous_map[record["code"]])
+    return merged
+
+
 def run_once(config: dict, session, do_init: bool = False, send_email: bool = False, interactive: bool = True):
     """执行一次完整扫描。"""
     if do_init or not _load_fund_list(config):
@@ -137,6 +155,14 @@ def run_once(config: dict, session, do_init: bool = False, send_email: bool = Fa
     # 扫描
     print(f"\n📡 开始扫描 {len(fund_list)} 只基金...\n")
     results = fetcher.scan_all_funds(session, fund_list, config)
+
+    known_results = [r for r in results if r["purchase_status"] != "未知"]
+    if not known_results:
+        # 全部未知通常意味着数据源不可用；此时若继续保存，会把快照写空。
+        raise RuntimeError(
+            f"本轮扫描的 {len(results)} 只基金全部返回未知状态，疑似数据源不可用；"
+            "已保留上一轮快照，本次不写入任何变更。"
+        )
 
     # 打印全表
     notifier.print_all_status(results)
@@ -158,13 +184,13 @@ def run_once(config: dict, session, do_init: bool = False, send_email: bool = Fa
     report_path = config["data"].get("report_path", "report.txt")
     notifier.generate_report(results, changes, report_path)
 
-    # 保存本次快照（排除"未知"状态，避免污染下一轮对比）
-    valid_results = [r for r in results if r["purchase_status"] != "未知"]
-    unknown_count = len(results) - len(valid_results)
+    # 保存本次快照：未知状态沿用上一轮的已知记录，避免丢失历史
+    merged = merge_snapshot(previous, results)
+    unknown_count = len(results) - len(known_results)
     if unknown_count > 0:
-        logger.warning(f"{unknown_count} 只基金状态未知，已从快照中排除以保护上一轮数据。")
-    save_json(status_path, valid_results)
-    logger.info(f"状态快照已保存到 {status_path} ({len(valid_results)}/{len(results)} 只)")
+        logger.warning(f"{unknown_count} 只基金状态未知，快照中沿用上一轮记录。")
+    save_json(status_path, merged)
+    logger.info(f"状态快照已保存到 {status_path} ({len(merged)} 条)")
 
     # 邮件推送：仅在有变化时发送（无变化不发，避免噪音邮件）
     if send_email:
