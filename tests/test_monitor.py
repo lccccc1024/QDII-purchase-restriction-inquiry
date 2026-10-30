@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from monitor import compare_status
+from monitor import compare_status, merge_snapshot
 
 
 def _rec(code="000001", status="限制大额申购", limit=None, source="detail_page"):
@@ -59,3 +59,27 @@ class TestCompareStatus:
     def test_unknown_status_skipped(self):
         new = [_rec(status="未知")]
         assert compare_status([], new) == []
+
+
+class TestMergeSnapshot:
+    """快照合并：未知状态不得删除既有记录。"""
+
+    def test_unknown_keeps_previous_record(self):
+        previous = [_rec(status="暂停申购", limit=None)]
+        merged = merge_snapshot(previous, [_rec(status="未知", limit=None)])
+        assert len(merged) == 1
+        assert merged[0]["purchase_status"] == "暂停申购"
+
+    def test_unknown_without_history_is_dropped(self):
+        assert merge_snapshot([], [_rec(status="未知")]) == []
+
+    def test_known_replaces_previous(self):
+        previous = [_rec(status="暂停申购")]
+        merged = merge_snapshot(previous, [_rec(status="开放申购")])
+        assert merged[0]["purchase_status"] == "开放申购"
+
+    def test_total_outage_keeps_snapshot_intact(self):
+        """全部未知时快照内容不得变化——否则恢复后会刷出一批假"(新增)"。"""
+        previous = [_rec(code="000001"), _rec(code="000002", status="开放申购")]
+        results = [_rec(code="000001", status="未知"), _rec(code="000002", status="未知")]
+        assert merge_snapshot(previous, results) == previous
