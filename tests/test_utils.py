@@ -6,8 +6,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from utils import (
     PurchaseStatus,
+    load_json,
     normalize_status,
     parse_limit_amount,
+    save_json,
 )
 
 
@@ -45,6 +47,13 @@ class TestNormalizeStatus:
         assert normalize_status("暂停大额申购") == PurchaseStatus.LIMITED
         assert normalize_status("限制大额申购") == PurchaseStatus.LIMITED
 
+    def test_negated_open_is_suspended(self):
+        """'不开放申购'含'开放'，不得被关键词循环判成 OPEN。"""
+        assert normalize_status("不开放申购") == PurchaseStatus.SUSPENDED
+        assert normalize_status("暂停开放") == PurchaseStatus.SUSPENDED
+        assert normalize_status("暂不开放") == PurchaseStatus.SUSPENDED
+        assert normalize_status("不可申购") == PurchaseStatus.SUSPENDED
+
 
 class TestParseLimitAmount:
     """测试 parse_limit_amount 的金额提取逻辑。"""
@@ -80,3 +89,27 @@ class TestParseLimitAmount:
     def test_no_number(self):
         assert parse_limit_amount("无限制") is None
         assert parse_limit_amount("开放申购") is None
+
+
+class TestJsonPersistence:
+    """快照读写：原子写入 + 损坏文件降级。"""
+
+    def test_roundtrip(self, tmp_path):
+        path = tmp_path / "status.json"
+        data = [{"code": "000001", "status": "开放申购"}]
+        save_json(str(path), data)
+        assert load_json(str(path)) == data
+
+    def test_missing_file_returns_default(self, tmp_path):
+        assert load_json(str(tmp_path / "nope.json"), default=[]) == []
+
+    def test_corrupted_file_returns_default(self, tmp_path):
+        path = tmp_path / "broken.json"
+        path.write_text("{ this is not json", encoding="utf-8")
+        assert load_json(str(path), default=[]) == []
+
+    def test_write_leaves_no_temp_file(self, tmp_path):
+        path = tmp_path / "status.json"
+        save_json(str(path), [])
+        leftovers = [p.name for p in tmp_path.iterdir() if p.name.startswith(".tmp-")]
+        assert leftovers == []
