@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import sys
+import tempfile
 from datetime import datetime, timezone, timedelta
 from enum import Enum
 from typing import Optional
@@ -46,6 +47,9 @@ def normalize_status(raw: str) -> PurchaseStatus:
     """将抓取到的原始申购状态文本映射为标准化枚举值。"""
     if not raw:
         return PurchaseStatus.UNKNOWN
+    # 否定表述先归为暂停：否则下文的关键词循环会用"开放"命中"不开放申购"。
+    if any(neg in raw for neg in ("不开放", "暂停开放", "暂不开放", "不可申购", "停止开放")):
+        return PurchaseStatus.SUSPENDED
     raw_lower = raw.strip().lower()
     # 先检查限制大额申购 — 某些页面把"限制大额申购"也称作"暂停"而容易误分类
     for kw in STATUS_KEYWORDS[PurchaseStatus.LIMITED]:
@@ -114,18 +118,36 @@ def setup_logging(log_file: Optional[str] = None, level: int = logging.INFO):
 
 # ---- JSON 读写 ----
 def load_json(path: str, default=None):
-    """读取 JSON 文件，不存在时返回 default。"""
+    """读取 JSON 文件，不存在或损坏时返回 default。"""
     if not os.path.exists(path):
         return default
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        # 损坏的快照不应让监控永久停摆：记录后按"缺失"处理，下一轮重建。
+        logging.getLogger(__name__).error("JSON 解析失败（%s）：%s，按缺失处理", path, e)
+        return default
 
 
 def save_json(path: str, data):
-    """将数据写入 JSON 文件，自动创建父目录。"""
-    os.makedirs(os.path.dirname(path) if os.path.dirname(path) else ".", exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    """原子写入 JSON：先写临时文件再替换，避免中断留下半截文件。"""
+    directory = os.path.dirname(path) or "."
+    os.makedirs(directory, exist_ok=True)
+
+    fd, tmp_path = tempfile.mkstemp(dir=directory, prefix=".tmp-", suffix=".json")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, path)
+    except BaseException:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
 
 
 # ---- 配置 ----
