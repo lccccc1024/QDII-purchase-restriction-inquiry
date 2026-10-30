@@ -5,6 +5,8 @@ on:
     # UTC 10:00 = 北京时间 18:00
     - cron: "0 10 * * *"
   workflow_dispatch: {}
+  # 只在 PR 上跑测试；本工作流会往 main 提交快照，加 push 触发会形成"提交→再跑"的循环
+  pull_request:
 
 permissions:
   contents: write
@@ -30,13 +32,20 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Run unit tests
+        run: |
+          pip install pytest
+          python -m pytest tests -q
+
       - name: Run monitor scan
+        if: github.event_name != 'pull_request'
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: python monitor.py --once --email
 
       - name: Commit status snapshot
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
