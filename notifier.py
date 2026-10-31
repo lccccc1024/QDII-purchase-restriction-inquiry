@@ -11,6 +11,10 @@ import requests
 
 logger = logging.getLogger(__name__)
 
+# 变更记录只保留最近这么多条：文件会随每次状态变化增长，不做上限的话
+# 会在仓库里无限累积（同时拖慢 git 对它的历史处理）。
+CHANGELOG_MAX_ROWS = 2000
+
 def _use_color() -> bool:
     """检测当前终端是否支持 ANSI 颜色输出。
 
@@ -242,6 +246,21 @@ def print_changes(changes: list[dict]):
         print(line)
 
 
+def _trim_changelog(path: str, max_rows: int):
+    """只保留最近 max_rows 条变更，避免文件无界增长。"""
+    with open(path, "r", encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.reader(f))
+    if len(rows) <= max_rows + 1:
+        return
+    header, body = rows[0], rows[1:]
+    kept = body[-max_rows:]
+    with open(path, "w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        writer.writerows(kept)
+    logger.info(f"变更记录超过 {max_rows} 行，已裁剪为最近 {max_rows} 条")
+
+
 def append_changelog_csv(changes: list[dict], path: str):
     """将变更追加到 CSV 文件。"""
     if not changes:
@@ -266,6 +285,7 @@ def append_changelog_csv(changes: list[dict], path: str):
                 ch.get("new_limit", ""),
             ])
     logger.info(f"变更记录已写入 {path}")
+    _trim_changelog(path, CHANGELOG_MAX_ROWS)
 
 
 # ═══════════════════════════════════════════════════════

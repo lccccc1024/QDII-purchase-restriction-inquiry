@@ -38,7 +38,7 @@ python monitor.py --daemon --interval 3600  # 常驻监控
 | 文件 | 说明 |
 |---|---|
 | `report.txt` | 人类可读的扫描报告 |
-| `changelog.csv` | 变更历史（可用 Excel 打开） |
+| `changelog.csv` | 变更历史（可用 Excel 打开），只保留最近 2000 条，超出后自动裁剪 |
 | `status_log.json` | 最近一次扫描的状态快照（GitHub Actions 会提交回仓库作为下次对比基线） |
 | `monitor.log` | 详细运行日志 |
 | `fund_list.json` | 监控基金列表（可手动编辑） |

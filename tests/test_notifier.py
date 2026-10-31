@@ -1,52 +1,68 @@
-"""通知模块单元测试。"""
+"""通知模块单元测试（变更记录裁剪）。"""
 
-import sys
+import csv
 import os
+import sys
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from notifier import (
-    _build_summary,
-    _build_change_lines,
-    _escape_markdown,
-)
+import notifier
+from notifier import append_changelog_csv
 
 
-class TestBuildSummary:
-    def test_empty(self):
-        assert _build_summary([]) == []
-
-    def test_with_data(self):
-        data = [
-            {"index": "nasdaq100", "purchase_status": "开放申购"},
-            {"index": "nasdaq100", "purchase_status": "暂停申购"},
-        ]
-        lines = _build_summary(data)
-        assert len(lines) == 1
-        assert "纳指100" in lines[0]
-
-
-class TestBuildChangeLines:
-    def test_no_changes(self):
-        lines = _build_change_lines([], with_color=False)
-        assert any("未检测到" in l for l in lines)
-
-    def test_with_changes(self):
-        changes = [{
-            "code": "000001",
-            "name": "测试基金A",
-            "index": "nasdaq100",
-            "old_status": "暂停申购",
-            "new_status": "开放申购",
-            "old_limit": None,
-            "new_limit": None,
-            "checked_at": "2024-01-01T00:00:00",
-        }]
-        lines = _build_change_lines(changes, with_color=False)
-        combined = "\n".join(lines)
-        assert "暂停申购" in combined
-        assert "开放申购" in combined
+def _change(i: int) -> dict:
+    return {
+        "checked_at": f"2026-10-{i + 1:02d}T18:00:00+08:00",
+        "code": f"0000{i:02d}",
+        "name": f"测试基金{i}",
+        "index": "nasdaq100" if i % 2 == 0 else "sp500",
+        "old_status": "暂停申购",
+        "new_status": "开放申购",
+        "old_limit": None,
+        "new_limit": 1000.0,
+    }
 
 
-class TestEscapeMarkdown:
-    def test_escape_special_chars(self):
-        assert _escape_markdown("a*b_c[d]e") == r"a\*b\_c\[d\]e"
+def _read(path: str) -> list[list[str]]:
+    with open(path, "r", encoding="utf-8-sig", newline="") as f:
+        return list(csv.reader(f))
+
+
+def test_creates_header_and_rows(tmp_path):
+    path = str(tmp_path / "changelog.csv")
+    append_changelog_csv([_change(1), _change(2)], path)
+
+    rows = _read(path)
+    assert rows[0][0] == "时间"
+    assert len(rows) == 3
+
+
+def test_trims_to_recent_rows(tmp_path, monkeypatch):
+    """超过上限时保留最近 N 条，表头不变。"""
+    monkeypatch.setattr(notifier, "CHANGELOG_MAX_ROWS", 5)
+    path = str(tmp_path / "changelog.csv")
+
+    for i in range(8):
+        append_changelog_csv([_change(i)], path)
+
+    rows = _read(path)
+    assert len(rows) == 6, rows
+    assert rows[0][0] == "时间"
+    # 最近一条必须保留
+    assert rows[-1][1] == "000007"
+
+
+def test_no_trim_below_limit(tmp_path, monkeypatch):
+    monkeypatch.setattr(notifier, "CHANGELOG_MAX_ROWS", 5)
+    path = str(tmp_path / "changelog.csv")
+
+    for i in range(3):
+        append_changelog_csv([_change(i)], path)
+
+    assert len(_read(path)) == 4
+
+
+def test_empty_changes_is_noop(tmp_path):
+    path = str(tmp_path / "changelog.csv")
+    append_changelog_csv([], path)
+    assert not os.path.exists(path)
