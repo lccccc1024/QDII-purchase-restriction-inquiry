@@ -9,6 +9,7 @@
 """
 
 import argparse
+import csv
 import logging
 import os
 import sys
@@ -154,6 +155,9 @@ NOTIFY_STATE_DEFAULT = {
     "last_change_count": 0,  # 该次变化的条数
 }
 
+# 同一次扫描写入 changelog 的各条时间戳会相差几秒到几分钟，用时间窗口归为一批
+CHANGELOG_BATCH_WINDOW_SECONDS = 900
+
 
 def _notify_state_path(config: dict) -> str:
     return config["data"].get("notify_state_path", "notify_state.json")
@@ -210,6 +214,47 @@ def _as_int(value, default: int) -> int:
         return default
 
 
+def last_change_from_changelog(path: str) -> tuple[str, int]:
+    """从 changelog.csv 末尾推断"最近一次变更"（时间 + 该批条数）。
+
+    仅用于通知状态里还没有记录时的回填：否则首封周报会显示"暂无记录"，
+    而仓库里的 changelog 明明有历史。
+    """
+    if not os.path.exists(path):
+        return "", 0
+    try:
+        with open(path, "r", encoding="utf-8-sig", newline="") as f:
+            rows = list(csv.reader(f))
+    except OSError as e:
+        logger.warning(f"读取 {path} 失败，无法回填最近变更: {e}")
+        return "", 0
+
+    body = [r for r in rows[1:] if r and r[0].strip()]
+    if not body:
+        return "", 0
+
+    last_ts = body[-1][0].strip()
+    try:
+        last_dt = datetime.fromisoformat(last_ts)
+    except ValueError:
+        return last_ts, 1
+
+    count = 0
+    for row in reversed(body):
+        try:
+            dt = datetime.fromisoformat(row[0].strip())
+        except (ValueError, TypeError):
+            break
+        try:
+            gap = abs((last_dt - dt).total_seconds())
+        except TypeError:  # 时区信息不一致（带/不带 tz）
+            break
+        if gap > CHANGELOG_BATCH_WINDOW_SECONDS:
+            break
+        count += 1
+    return last_ts, count
+
+
 def heartbeat_due(interval_days: int, last_email_at: str, today: date) -> bool:
     """距上次成功发信满 interval_days 天则发心跳；0/负数表示关闭。"""
     if not interval_days or interval_days <= 0:
@@ -241,6 +286,18 @@ def dispatch_notifications(config: dict, changes: list[dict], results: list[dict
     payload = merge_pending(pending, changes)
     today = datetime.now(timezone(timedelta(hours=8))).date()
     ok = True
+
+    # 首次运行（或状态文件缺失）时用 changelog 回填，避免周报显示"暂无记录"
+    if not state.get("last_change_at"):
+        seeded_at, seeded_count = last_change_from_changelog(
+            config["data"].get("changelog_path", "changelog.csv")
+        )
+        if seeded_at:
+            state["last_change_at"] = seeded_at
+            state["last_change_count"] = seeded_count
+            logger.info(
+                f"已从 changelog 回填最近一次变更：{seeded_at}（{seeded_count} 条）"
+            )
 
     if changes:
         state["last_change_at"] = changes[-1].get(

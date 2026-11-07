@@ -12,6 +12,7 @@ from monitor import (
     compare_status,
     dispatch_notifications,
     heartbeat_due,
+    last_change_from_changelog,
     merge_pending,
     merge_snapshot,
 )
@@ -162,17 +163,75 @@ class TestHeartbeatDue:
         assert heartbeat_due(7, "not-a-date", date(2026, 11, 7)) is True
 
 
+class TestLastChangeBackfill:
+    """首次运行从 changelog 回填"最近一次变更"。"""
+
+    HEADER = "时间,基金代码,基金简称,跟踪指数,旧状态,新状态,旧限额,新限额\n"
+
+    def _write(self, tmp_path, timestamps):
+        path = tmp_path / "changelog.csv"
+        lines = [self.HEADER.strip()]
+        for i, ts in enumerate(timestamps):
+            lines.append(f"{ts},00000{i},测试基金A,纳斯达克100,限制大额申购,暂停申购,10,100")
+        path.write_text("\n".join(lines) + "\n", encoding="utf-8-sig")
+        return str(path)
+
+    def test_missing_file(self, tmp_path):
+        assert last_change_from_changelog(str(tmp_path / "nope.csv")) == ("", 0)
+
+    def test_empty_body(self, tmp_path):
+        path = tmp_path / "changelog.csv"
+        path.write_text(self.HEADER, encoding="utf-8-sig")
+        assert last_change_from_changelog(str(path)) == ("", 0)
+
+    def test_last_batch_counted(self, tmp_path):
+        """同一次扫描的 4 条算一批，前一天的行不并入。"""
+        path = self._write(tmp_path, [
+            "2026-10-15T22:48:49+08:00",
+            "2026-10-20T22:51:17+08:00",
+            "2026-10-20T22:53:00+08:00",
+            "2026-10-20T22:53:04+08:00",
+            "2026-10-20T22:53:40+08:00",
+        ])
+        ts, count = last_change_from_changelog(path)
+        assert ts == "2026-10-20T22:53:40+08:00"
+        assert count == 4
+
+    def test_unparsable_timestamp_falls_back(self, tmp_path):
+        path = self._write(tmp_path, ["not-a-time"])
+        assert last_change_from_changelog(path) == ("not-a-time", 1)
+
+
 class TestDispatchNotifications:
     """通知分发：失败入队补发、成功清空、无变化按周心跳。"""
 
     def _config(self, tmp_path, interval=7):
         return {
-            "data": {"notify_state_path": str(tmp_path / "notify_state.json")},
+            "data": {
+                "notify_state_path": str(tmp_path / "notify_state.json"),
+                "changelog_path": str(tmp_path / "changelog.csv"),
+            },
             "email": {"heartbeat_interval_days": interval},
         }
 
     def _read_state(self, tmp_path):
         return json.loads((tmp_path / "notify_state.json").read_text(encoding="utf-8"))
+
+    def test_backfills_last_change_from_changelog(self, tmp_path, monkeypatch):
+        cfg = self._config(tmp_path)
+        (tmp_path / "changelog.csv").write_text(
+            TestLastChangeBackfill.HEADER
+            + "2026-10-20T22:53:40+08:00,000001,测试基金A,纳斯达克100,限制大额申购,暂停申购,10,100\n",
+            encoding="utf-8-sig",
+        )
+        monkeypatch.setattr(
+            email_sender, "send_heartbeat_email",
+            lambda *a, **k: email_sender.SEND_SENT,
+        )
+        assert dispatch_notifications(cfg, [], [_rec()]) is True
+        state = self._read_state(tmp_path)
+        assert state["last_change_at"] == "2026-10-20T22:53:40+08:00"
+        assert state["last_change_count"] == 1
 
     def test_failure_queues_changes(self, tmp_path, monkeypatch):
         monkeypatch.setattr(
