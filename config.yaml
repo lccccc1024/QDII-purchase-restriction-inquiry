@@ -23,6 +23,7 @@ data:
   fund_list_path: "fund_list.json"
   status_log_path: "status_log.json"
   changelog_path: "changelog.csv"
+  notify_state_path: "notify_state.json"   # 补发队列 / 心跳节流状态（需随仓库提交）
   report_path: "report.txt"
   log_file: "monitor.log"
 
@@ -35,6 +36,7 @@ email:
   smtp_port: 587
   sender: "lcandfq@gmail.com"   # 发件 Gmail 地址
   recipient: "lcandfq@gmail.com"  # 收件人（多个用逗号分隔）
+  heartbeat_interval_days: 7    # 至少每隔这么多天发一封"无变化"心跳邮件（0=关闭）
   # 注意：Gmail 密码/应用专用密码请通过环境变量 GMAIL_USER / GMAIL_APP_PASSWORD 提供，
   # 切勿写入本文件（GitHub Actions 中配置为 Secrets）。
 

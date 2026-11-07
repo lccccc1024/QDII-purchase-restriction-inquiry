@@ -40,6 +40,7 @@ python monitor.py --daemon --interval 3600  # 常驻监控
 | `report.txt` | 人类可读的扫描报告 |
 | `changelog.csv` | 变更历史（可用 Excel 打开），只保留最近 2000 条，超出后自动裁剪 |
 | `status_log.json` | 最近一次扫描的状态快照（GitHub Actions 会提交回仓库作为下次对比基线） |
+| `notify_state.json` | 通知状态：补发队列、上次成功发信日期、最近一次变化（GitHub Actions 提交回仓库，用于失败补发与心跳节流） |
 | `monitor.log` | 详细运行日志 |
 | `fund_list.json` | 监控基金列表（可手动编辑） |
 
@@ -47,9 +48,12 @@ python monitor.py --daemon --interval 3600  # 常驻监控
 
 - **正文**：HTML 格式，直接列出本次**有变化的标的**（基金名称、代码、跟踪指数、旧状态→新状态、限额变化），附扫描时间与全量状态分布摘要
 - **附件**：`基金监控结果.csv`，包含**所有被监控标的**的检测结果（扫描时间、代码、简称、指数、状态、限额、数据源），UTF-8 BOM 编码，Excel 可直接打开
-- **无变化时不发送邮件**，避免噪音
+- **无变化时不发变更邮件**，避免噪音；但每 `heartbeat_interval_days` 天（默认 7 天）会发一封**心跳/周报邮件**（当前全量状态 + 最近一次变化时间），用来证明监控仍在正常运行，让"沉默"不再等于"正常"
+- **发送失败自动补发**：未送达的变更会写入 `notify_state.json` 的补发队列，下次运行自动重发（主题带"（补发）"），并把失败上报为 GitHub Actions 错误注解、让本次运行变红
 
 凭证通过环境变量 `GMAIL_USER` / `GMAIL_APP_PASSWORD` 提供（GitHub Secrets），不会写入代码或配置文件。
+
+> 通知发送失败时 `monitor.py` 以退出码 `2` 结束（快照与补发队列仍会提交），因此 CI 会变红而不是静默通过。
 
 ## 首次运行
 
@@ -92,6 +96,7 @@ email:
   smtp_port: 587
   sender: ""               # 发件 Gmail
   recipient: ""            # 收件人（多个用逗号分隔）
+  heartbeat_interval_days: 7  # 无变化时的心跳邮件间隔（天），0=关闭
 
 proxy:
   http: ""                 # HTTP 代理
@@ -111,17 +116,23 @@ proxy:
 **GitHub Actions 中基金抓取失败**
 GitHub Actions 运行在美国 IP，天天基金可能限流。已内置蛋卷基金备用源；如仍失败可考虑在 workflow 中配置代理。
 
+**很久没收到邮件，正常吗？**
+无变化时本来就不发变更邮件。现在每 7 天会有一封心跳/周报邮件（首次启用后、下一次运行就会先收到一封，用于确认链路）；如果连心跳邮件都收不到，去 Actions 看最近一次运行：
+- 运行是绿的 → 邮件已发出，检查垃圾邮件/收件规则
+- 运行是红的且日志有"邮件发送失败" → 检查 `GMAIL_USER` / `GMAIL_APP_PASSWORD` Secrets 与 Gmail 应用专用密码，变更会在下次运行自动补发
+
 ## 项目结构
 
 ```
 project/
   monitor.py        # 主程序入口
   fetcher.py        # 数据抓取（天天基金 / 蛋卷基金）
-  email_sender.py   # Gmail 邮件推送（正文变化明细 + CSV 附件）
+  email_sender.py   # Gmail 推送（变化明细 / 心跳周报 + CSV 附件）
   notifier.py       # 输出通知（控制台/CSV/Webhook）
   utils.py          # 工具函数
   config.yaml       # 配置文件
   fund_list.json    # 监控基金列表
+  notify_state.json # 通知状态（补发队列 / 心跳节流）
   .github/workflows/daily-monitor.yml  # 每日定时任务
   run.bat / run.sh  # 一键启动脚本
 ```

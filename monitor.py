@@ -13,6 +13,7 @@ import logging
 import os
 import sys
 import time
+from datetime import date, datetime, timezone, timedelta
 
 # 在 Windows 上强制使用 UTF-8 输出，避免 emoji 等字符编码错误
 if sys.platform == "win32":
@@ -142,15 +143,157 @@ def merge_snapshot(previous_records: list[dict], new_records: list[dict]) -> lis
     return merged
 
 
-def run_once(config: dict, session, do_init: bool = False, send_email: bool = False, interactive: bool = True):
-    """执行一次完整扫描。"""
+# ═══════════════════════════════════════════════════════
+#  通知状态：补发队列 + 心跳节流
+# ═══════════════════════════════════════════════════════
+
+NOTIFY_STATE_DEFAULT = {
+    "pending": [],          # 上次未送达的变更，下次运行自动补发
+    "last_email_at": "",    # 最近一次成功发信的日期（北京时间，YYYY-MM-DD）
+    "last_change_at": "",   # 最近一次检测到变化的扫描时间
+    "last_change_count": 0,  # 该次变化的条数
+}
+
+
+def _notify_state_path(config: dict) -> str:
+    return config["data"].get("notify_state_path", "notify_state.json")
+
+
+def load_notify_state(config: dict) -> dict:
+    """读取通知状态；文件缺失或损坏时退回默认值。"""
+    path = _notify_state_path(config)
+    state = load_json(path, default={})
+    if not isinstance(state, dict):
+        logger.warning(f"{path} 内容不是 JSON 对象，按空状态处理")
+        state = {}
+    merged = dict(NOTIFY_STATE_DEFAULT)
+    merged.update(state)
+    if not isinstance(merged.get("pending"), list):
+        merged["pending"] = []
+    return merged
+
+
+def save_notify_state(config: dict, state: dict) -> None:
+    save_json(_notify_state_path(config), state)
+
+
+def merge_pending(pending: list[dict], changes: list[dict]) -> list[dict]:
+    """合并"待补发"与"本轮"变更，同一只基金只保留一条净变化。
+
+    Gmail 可能连续多天不可用，同一只基金在补发期间可能经历多次变化；
+    保留最早的旧状态 + 最新的新状态，避免一封邮件里同一基金出现多行。
+    """
+    merged: dict[str, dict] = {}
+    for record in list(pending) + list(changes):
+        if not isinstance(record, dict):
+            continue
+        code = record.get("code")
+        if not code:
+            continue
+        base = merged.get(code)
+        if base is None:
+            merged[code] = dict(record)
+            continue
+        base["new_status"] = record.get("new_status", base.get("new_status"))
+        base["new_limit"] = record.get("new_limit")
+        base["checked_at"] = record.get("checked_at", base.get("checked_at"))
+        base["name"] = record.get("name", base.get("name"))
+        base["index"] = record.get("index", base.get("index"))
+    return list(merged.values())
+
+
+def _as_int(value, default: int) -> int:
+    """宽松转整数：配置/状态文件被手改坏时不让通知流程崩掉。"""
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def heartbeat_due(interval_days: int, last_email_at: str, today: date) -> bool:
+    """距上次成功发信满 interval_days 天则发心跳；0/负数表示关闭。"""
+    if not interval_days or interval_days <= 0:
+        return False
+    if not last_email_at:
+        return True
+    try:
+        last = date.fromisoformat(str(last_email_at)[:10])
+    except ValueError:
+        return True
+    return (today - last).days >= interval_days
+
+
+def _alert(message: str) -> None:
+    """记录错误；在 GitHub Actions 中额外输出错误注解，运行页可见。"""
+    logger.error(message)
+    if os.environ.get("GITHUB_ACTIONS"):
+        print(f"::error::{message}")
+
+
+def dispatch_notifications(config: dict, changes: list[dict], results: list[dict]) -> bool:
+    """发送变更邮件（含补发）或心跳邮件，返回是否全部成功。
+
+    失败时把变更留在 notify_state.json 的补发队列里，并输出错误注解；
+    调用方返回非零退出码，让 CI 变红而不是继续沉默。
+    """
+    state = load_notify_state(config)
+    pending = state.get("pending") or []
+    payload = merge_pending(pending, changes)
+    today = datetime.now(timezone(timedelta(hours=8))).date()
+    ok = True
+
+    if changes:
+        state["last_change_at"] = changes[-1].get(
+            "checked_at", state.get("last_change_at", "")
+        )
+        state["last_change_count"] = len(changes)
+
+    if payload:
+        status = email_sender.send_monitor_email(
+            config, payload, results, retry=bool(pending)
+        )
+        if status == email_sender.SEND_SENT:
+            state["pending"] = []
+            state["last_email_at"] = today.isoformat()
+        elif status == email_sender.SEND_FAILED:
+            state["pending"] = payload
+            ok = False
+            _alert(
+                f"变更邮件发送失败，{len(payload)} 条变更已加入补发队列，"
+                "下次运行自动重试。"
+            )
+    else:
+        interval = _as_int(
+            config.get("email", {}).get("heartbeat_interval_days", 7), 7
+        )
+        if heartbeat_due(interval, state.get("last_email_at", ""), today):
+            status = email_sender.send_heartbeat_email(
+                config,
+                results,
+                last_change_at=state.get("last_change_at", ""),
+                last_change_count=_as_int(state.get("last_change_count", 0), 0),
+            )
+            if status == email_sender.SEND_SENT:
+                state["last_email_at"] = today.isoformat()
+            elif status == email_sender.SEND_FAILED:
+                ok = False
+                _alert("心跳邮件发送失败，下次运行自动重试。")
+        else:
+            logger.info("未检测到变化，且未到心跳周期，跳过邮件推送。")
+
+    save_notify_state(config, state)
+    return ok
+
+
+def run_once(config: dict, session, do_init: bool = False, send_email: bool = False, interactive: bool = True) -> bool:
+    """执行一次完整扫描。返回通知是否成功（未启用邮件时恒为 True）。"""
     if do_init or not _load_fund_list(config):
         init_fund_list(config, session, interactive=interactive)
 
     fund_list = _load_fund_list(config)
     if not fund_list:
         logger.error("基金列表为空，请先运行 --init。")
-        return
+        return True
 
     # 扫描
     print(f"\n📡 开始扫描 {len(fund_list)} 只基金...\n")
@@ -192,12 +335,10 @@ def run_once(config: dict, session, do_init: bool = False, send_email: bool = Fa
     save_json(status_path, merged)
     logger.info(f"状态快照已保存到 {status_path} ({len(merged)} 条)")
 
-    # 邮件推送：仅在有变化时发送（无变化不发，避免噪音邮件）
-    if send_email:
-        if changes:
-            email_sender.send_monitor_email(config, changes, results)
-        else:
-            logger.info("未检测到变化，跳过邮件推送。")
+    # 通知：有变化发变更邮件（失败进补发队列）；长期无变化时按周发心跳证明存活
+    notify_ok = dispatch_notifications(config, changes, results) if send_email else True
+
+    return notify_ok
 
 
 def run_daemon(config: dict, session, interval: int, send_email: bool = False):
@@ -289,7 +430,9 @@ def main():
             init_fund_list(config, session, interactive=False)
         run_daemon(config, session, interval, send_email=args.email)
     elif args.once:
-        run_once(config, session, do_init=args.init, send_email=args.email)
+        if not run_once(config, session, do_init=args.init, send_email=args.email):
+            # 通知未能送达：快照与补发队列已保存，用非零退出码让 CI 变红
+            sys.exit(2)
     elif args.init:
         init_fund_list(config, session, interactive=True)
 

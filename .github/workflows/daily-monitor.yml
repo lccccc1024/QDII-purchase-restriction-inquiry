@@ -42,19 +42,19 @@ jobs:
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        # 通知发送失败时脚本以退出码 2 结束，让本次运行变红，避免"沉默=正常"的误判
         run: python monitor.py --once --email
 
       - name: Commit status snapshot
-        if: github.event_name != 'pull_request'
+        # 通知失败时也要提交：快照与补发队列都靠仓库文件跨运行传递
+        if: always() && github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # changelog.csv 仅在有变化时生成；无变化时只提交快照
-          if [ -f changelog.csv ]; then
-            git add status_log.json changelog.csv
-          else
-            git add status_log.json
-          fi
+          # changelog.csv 仅在有变化时生成，notify_state.json 仅在启用邮件时生成
+          for f in status_log.json changelog.csv notify_state.json; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
           if git diff --cached --quiet; then
             echo "::notice::快照无变化，无需提交"
           else

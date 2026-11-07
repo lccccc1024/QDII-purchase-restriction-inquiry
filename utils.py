@@ -174,6 +174,7 @@ def load_config(path: str = "config.yaml") -> dict:
                 "fund_list_path": "fund_list.json",
                 "status_log_path": "status_log.json",
                 "changelog_path": "changelog.csv",
+                "notify_state_path": "notify_state.json",
                 "report_path": "report.txt",
                 "log_file": "monitor.log",
             },
@@ -183,6 +184,7 @@ def load_config(path: str = "config.yaml") -> dict:
                 "smtp_port": 587,
                 "sender": "",
                 "recipient": "",
+                "heartbeat_interval_days": 7,
             },
             "proxy": {"http": "", "https": ""},
         }
